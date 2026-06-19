@@ -1,0 +1,1782 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo Các Case - Reminder Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+    /* ─── WEATHER CARD ─────────────────────────────────────── */
+    .wx-card-container {
+      display: none;
+      transition: all 0.3s ease;
+    }
+
+    .wx-card {
+      position: relative;
+      width: 100%;
+      min-height: 180px;
+      height: auto;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+      color: #fff;
+      font-family: 'Inter', -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif;
+      transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .wx-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    /* PURE CSS BACKGROUNDS (REPLACING APPLE ASSETS) */
+    .bg-hot {
+      background: linear-gradient(145deg, #0d6ebd 0%, #3094d1 50%, #68b8e8 100%);
+    }
+
+    .bg-rain {
+      background: linear-gradient(150deg, #2b3a4a 0%, #4b5d6d 100%);
+    }
+
+    .bg-alert {
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+    }
+
+    /* CSS SUN & RAYS */
+    .css-sun {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      width: 80px;
+      height: 80px;
+      background: #ffde00;
+      border-radius: 50%;
+      box-shadow: 0 0 30px #ff9d00, 0 0 60px rgba(255, 157, 0, 0.6), 0 0 100px rgba(255, 200, 0, 0.4);
+      animation: pulse-sun 4s infinite alternate;
+    }
+
+    .css-rays {
+      position: absolute;
+      right: -60px;
+      top: -60px;
+      width: 240px;
+      height: 240px;
+      background: repeating-conic-gradient(from 0deg, transparent 0deg 15deg, rgba(255, 255, 255, 0.15) 15deg 30deg);
+      border-radius: 50%;
+      -webkit-mask-image: radial-gradient(circle, black 20%, transparent 65%);
+      animation: spin-rays 40s linear infinite;
+    }
+
+    /* CSS CLOUDS */
+    .css-cloud {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 100px;
+      width: 120px;
+      height: 35px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .css-cloud::before {
+      content: '';
+      position: absolute;
+      background: inherit;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      top: -25px;
+      left: 15px;
+    }
+
+    .css-cloud::after {
+      content: '';
+      position: absolute;
+      background: inherit;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      top: -35px;
+      right: 15px;
+    }
+
+    .css-cloud.dark {
+      background: rgba(130, 140, 150, 0.95);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .cloud-1 {
+      right: -10px;
+      top: 15px;
+      animation: float-cloud 8s ease-in-out infinite;
+      transform: scale(1.1);
+    }
+
+    .cloud-2 {
+      right: 70px;
+      top: 60px;
+      animation: float-cloud 12s ease-in-out infinite -4s;
+      transform: scale(0.8);
+      opacity: 0.8;
+    }
+
+
+
+    /* ─── NEW UI LAYOUT ───────────────────────────────── */
+    .wx-content {
+      position: relative;
+      z-index: 10;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      box-sizing: border-box;
+      color: white;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .wx-layout-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .wx-temp-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .wx-icon {
+      font-size: 36px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, .2);
+    }
+
+    .wx-temp {
+      font-size: 38px;
+      font-weight: 700;
+      line-height: 1;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, .2);
+      letter-spacing: -1px;
+      margin-top: 0;
+    }
+
+    .wx-loc-group {
+      text-align: right;
+    }
+
+    .wx-city {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, .3);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      color: #fff;
+    }
+
+    .wx-subtitle {
+      font-size: 12px;
+      opacity: 0.8;
+      font-weight: 500;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+      margin-top: 0;
+    }
+
+    .wx-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.25);
+      margin-bottom: 14px;
+      width: 100%;
+      border: none;
+    }
+
+    .wx-layout-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex: 1;
+      padding-bottom: 4px;
+    }
+
+    .wx-text-group {
+      flex: 1;
+      padding-right: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .wx-desc {
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.45;
+      margin-bottom: 16px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+      color: #f0f0f0;
+    }
+
+    .wx-desc strong {
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .wx-cta {
+      font-size: 14px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 8px 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e2e8f0;
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.15),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .wx-cta:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
+      box-shadow:
+        0 6px 16px rgba(0, 0, 0, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.25),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Animations */
+    /* AI Sparkle Button Animations */
+    .ai-star-mask {
+      -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+      -webkit-mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+    }
+
+    @keyframes ai-sparkle-pulse {
+
+      0%,
+      100% {
+        transform: rotate(-8deg) scale(0.95);
+      }
+
+      50% {
+        transform: rotate(8deg) scale(1.05);
+        filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6));
+      }
+    }
+
+    @keyframes ai-sparkle-spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes ai-sparkle-pop-1 {
+
+      0%,
+      100% {
+        transform: translate(-8px, -8px) scale(0) rotate(0deg);
+        opacity: 0;
+      }
+
+      50% {
+        transform: translate(-10px, -14px) scale(1) rotate(45deg);
+        opacity: 0.9;
+      }
+    }
+
+    @keyframes ai-sparkle-pop-2 {
+
+      0%,
+      100% {
+        transform: translate(12px, -4px) scale(0) rotate(0deg);
+        opacity: 0;
+      }
+
+      50% {
+        transform: translate(18px, -8px) scale(1) rotate(-30deg);
+        opacity: 0.9;
+      }
+    }
+
+    @keyframes ai-sparkle-pop-3 {
+
+      0%,
+      100% {
+        transform: translate(-2px, 12px) scale(0) rotate(0deg);
+        opacity: 0;
+      }
+
+      50% {
+        transform: translate(-5px, 18px) scale(1) rotate(60deg);
+        opacity: 0.9;
+      }
+    }
+
+    @keyframes pulse-sun {
+      0% {
+        transform: scale(1);
+        opacity: 0.9;
+      }
+
+      100% {
+        transform: scale(1.05);
+        opacity: 1;
+        box-shadow: 0 0 50px #ff9d00, 0 0 80px rgba(255, 157, 0, 0.8), 0 0 120px rgba(255, 200, 0, 0.5);
+      }
+    }
+
+    @keyframes spin-rays {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes float-cloud {
+
+      0%,
+      100% {
+        margin-top: 0;
+      }
+
+      50% {
+        margin-top: -8px;
+      }
+    }
+
+    @keyframes rain-drop {
+      0% {
+        background-position: 0 0;
+      }
+
+      100% {
+        background-position: 15px 300px;
+      }
+    }
+
+    /* Apple Weather Keyframes */
+    @keyframes sunFloat {
+
+      0%,
+      100% {
+        transform: translateY(0) scale(1)
+      }
+
+      50% {
+        transform: translateY(-9px) scale(1.04)
+      }
+    }
+
+    @keyframes sunGlow {
+
+      0%,
+      100% {
+        opacity: .85;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: .95;
+        transform: scale(1.07)
+      }
+    }
+
+    @keyframes flarePop {
+
+      0%,
+      100% {
+        opacity: .3;
+        transform: scale(.95)
+      }
+
+      50% {
+        opacity: .55;
+        transform: scale(1.12)
+      }
+    }
+
+    @keyframes rayRotate {
+      from {
+        transform: rotate(0deg);
+        opacity: .18
+      }
+
+      to {
+        transform: rotate(360deg);
+        opacity: .22
+      }
+    }
+
+    /* Device Lists */
+    .dev-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .dev-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .d-ico {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background: #f0f4f8;
+    }
+
+    .d-info {
+      flex: 1;
+    }
+
+    .d-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #222;
+    }
+
+    .d-sub {
+      font-size: 12px;
+      color: #777;
+      margin-top: 2px;
+    }
+
+    .badge {
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .b-red {
+      background: #ffeceb;
+      color: #d63031;
+    }
+
+    .b-orange {
+      background: #fff3e0;
+      color: #e67e22;
+    }
+
+    .b-gray {
+      background: #f5f5f5;
+      color: #999;
+    }
+
+    /* Empty state */
+    .empty-state {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px 16px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .empty-ico {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .empty-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 6px;
+    }
+
+    .empty-desc {
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 16px;
+    }
+
+    .btn-primary {
+      background: #0d6ebd;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Fake Content block */
+    .dummy-content {
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .dummy-line {
+      height: 12px;
+      background: #eee;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .dummy-line.short {
+      width: 60%;
+    }
+
+    /* INJECTED REMINDER CARD CSS */
+    .reminder-card {
+      position: absolute;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 520px;
+      z-index: 10;
+      border-radius: 24px;
+      padding: 22px 22px 18px;
+      overflow: hidden;
+      background:
+        radial-gradient(120% 80% at 10% 0%, #cfe6ff 0%, transparent 60%),
+        radial-gradient(120% 80% at 100% 10%, #d9d0ff 0%, transparent 55%),
+        linear-gradient(135deg, #e6f1ff 0%, #f1ebff 100%);
+      box-shadow:
+        0 10px 30px rgba(99, 130, 255, 0.18),
+        0 2px 6px rgba(99, 130, 255, 0.08);
+    }
+
+    .reminder-card::before,
+    .reminder-card::after {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow:
+        0 0 8px rgba(255, 255, 255, 0.9),
+        30px -10px 0 -2px rgba(255, 255, 255, 0.85),
+        60px 8px 0 -3px rgba(255, 255, 255, 0.7),
+        -20px 20px 0 -2px rgba(255, 255, 255, 0.7);
+      pointer-events: none;
+    }
+
+    .reminder-card::before {
+      top: 55%;
+      left: 12px;
+      right: auto;
+      opacity: 0.6;
+    }
+
+    .reminder-card::after {
+      top: 72%;
+      left: 36%;
+      right: auto;
+      opacity: 0.5;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      /* right padding reserves space for the 76px robot wrap */
+      padding: 6px 84px 18px 4px;
+      position: relative;
+    }
+
+    .header-icon {
+      position: relative;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      isolation: isolate;
+      animation: iconBob 2.4s ease-in-out infinite;
+    }
+
+    .header-icon::before {
+      content: "";
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg,
+          #6aa9ff, #8ec5ff, #b39bff,
+          #ff8fd1, #7ad7ff, #6aa9ff);
+      animation: rotateRing 3s linear infinite;
+      filter: blur(2px);
+      z-index: -2;
+    }
+
+    .header-icon::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6aa9ff, #8c7bff);
+      box-shadow:
+        0 4px 14px rgba(106, 169, 255, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      z-index: -1;
+    }
+
+    .header-icon svg {
+      width: 22px;
+      height: 22px;
+      animation: iconPulse 2s ease-in-out infinite;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+    }
+
+    .header-title {
+      font-size: 15px;
+      font-weight: 900;
+      margin: 0;
+      background: linear-gradient(90deg, #5b3fb8 0%, #8c50e6 30%, #e8b5ff 50%, #8c50e6 70%, #5b3fb8 100%);
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: titleShimmer 4s linear infinite;
+    }
+
+    .header-robot-wrap {
+      position: absolute;
+      top: -10px;
+      right: -30px;
+      width: 140px;
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: robotFloat 3.4s ease-in-out infinite;
+    }
+
+    .header-robot-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 2px; border-radius: 50%;
+      background: radial-gradient(circle,
+          rgba(0, 229, 255, 0.3) 0%,
+          rgba(140, 99, 255, 0.2) 45%,
+          transparent 70%);
+      animation: haloPulse 2.8s ease-in-out infinite;
+      filter: blur(7px);
+      z-index: 0;
+    }
+
+    .header-robot-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle 2.5px at 50% 0%, #00e5ff 0%, transparent 100%),
+        radial-gradient(circle 2px at 100% 50%, #b39bff 0%, transparent 100%),
+        radial-gradient(circle 2.5px at 50% 100%, #7ad7ff 0%, transparent 100%),
+        radial-gradient(circle 2px at 0% 50%, #ffffff 0%, transparent 100%);
+      animation: rotateRing 5s linear infinite reverse;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .header-robot {
+      position: relative;
+      width: 66px;
+      height: 80px;
+      object-fit: contain;
+      z-index: 1;
+      filter:
+        drop-shadow(0 3px 12px rgba(0, 180, 255, 0.5)) drop-shadow(0 6px 20px rgba(140, 99, 255, 0.32));
+    }
+
+    .border-glow {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 2px;
+      background: conic-gradient(from var(--angle, 0deg),
+          transparent 0deg, transparent 260deg,
+          rgba(91, 63, 184, 0.4) 280deg,
+          rgba(140, 80, 230, 0.7) 300deg,
+          rgba(196, 109, 255, 0.9) 320deg,
+          rgba(232, 181, 255, 0.98) 338deg,
+          rgba(255, 208, 232, 1) 350deg,
+          rgba(255, 240, 250, 1) 357deg,
+          transparent 360deg);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: borderSweep 4s linear infinite;
+      pointer-events: none;
+      z-index: 3;
+      filter:
+        drop-shadow(0 0 4px rgba(255, 220, 245, 0.95)) drop-shadow(0 0 10px rgba(196, 109, 255, 0.85)) drop-shadow(0 0 20px rgba(91, 63, 184, 0.65));
+    }
+
+    .reminder-list {
+      position: relative;
+      z-index: 10;
+      background: rgba(255, 255, 255, 1);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-radius: 18px;
+      padding: 6px 0;
+      box-shadow: 0 4px 14px rgba(99, 130, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .reminder-list-content {
+      max-height: 178px;
+      overflow-y: auto;
+      padding: 0 14px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .reminder-list-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 48px;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.95) 80%);
+      pointer-events: none;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 6px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    .scroll-cue.hidden {
+      opacity: 0;
+    }
+
+    .scroll-cue svg {
+      width: 18px;
+      height: 18px;
+      fill: #8c5bff;
+      animation: cueBounce 1.5s infinite;
+    }
+
+    .reminder-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 6px;
+      border-bottom: 1px solid rgba(180, 200, 230, 0.45);
+    }
+
+    .reminder-item:last-child {
+      border-bottom: none;
+    }
+
+    .item-image {
+      width: 56px;
+      height: 70px;
+      flex-shrink: 0;
+      border-radius: 8px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      /* box-shadow removed */
+    }
+
+    .item-image svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .item-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a2940;
+      margin: 0 0 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-meta {
+      font-size: 14px;
+      color: #4a5b78;
+      margin: 0;
+    }
+
+    .item-meta .highlight {
+      color: #ff3838;
+      font-weight: 600;
+    }
+
+    .ai-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 22px;
+      border: none;
+      border-radius: 999px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      overflow: hidden;
+      isolation: isolate;
+      white-space: nowrap;
+      flex-shrink: 0;
+      box-shadow: 0 6px 18px rgba(99, 130, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      background: linear-gradient(120deg, #6aa9ff 0%, #8ec5ff 25%, #b39bff 55%, #7aa8ff 80%, #6aa9ff 100%);
+      background-size: 250% 100%;
+      animation: gradientFlow 4s linear infinite;
+      transition: transform .25s ease, box-shadow .25s ease;
+      font-family: inherit;
+    }
+
+    .ai-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 50%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .ai-btn::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -60%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.55) 50%, transparent 100%);
+      transform: skewX(-20deg);
+      animation: shine 3.2s ease-in-out infinite;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .ai-btn:hover {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 10px 24px rgba(99, 130, 255, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    }
+
+    .ai-btn:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    .ai-btn .label,
+    .ai-btn .sparkle {
+      position: relative;
+      z-index: 3;
+    }
+
+    .ai-btn .sparkle {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      animation: twinkle 1.8s ease-in-out infinite;
+      filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+    }
+
+    .reminder-card {
+      padding: 18px 14px 14px;
+      border-radius: 20px;
+    }
+
+    .card-header {
+      padding-right: 68px;
+    }
+
+    .header-title {
+      font-size: 15px;
+    }
+
+    .header-icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    .header-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+
+
+    .item-image {
+      width: 46px;
+      height: 58px;
+    }
+
+    .item-title {
+      font-size: 14px;
+    }
+
+    .item-meta {
+      font-size: 12px;
+    }
+
+    .ai-btn {
+      padding: 8px 16px;
+      font-size: 12px;
+    }
+
+    .scroll-cue-right {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 80px;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 90%);
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+    }
+
+    .scroll-cue-right.hidden {
+      opacity: 0;
+    }
+
+    .reminder-card {
+      position: relative !important;
+      right: auto !important;
+      top: auto !important;
+      margin-top: 20px !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    /* INJECTED PROPERTIES AND KEYFRAMES */
+    @property --angle {
+      syntax: "<angle>";
+      initial-value: 0deg;
+      inherits: false;
+    }
+
+    @keyframes rotateRing {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes iconBob {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-3px);
+      }
+    }
+
+    @keyframes iconPulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.08);
+      }
+    }
+
+    @keyframes titleShimmer {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      100% {
+        background-position: 200% 50%;
+      }
+    }
+
+    @keyframes robotFloat {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-1.5deg);
+      }
+
+      50% {
+        transform: translateY(-5px) rotate(1.5deg);
+      }
+    }
+
+    @keyframes haloPulse {
+
+      0%,
+      100% {
+        opacity: 0.7;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.18);
+      }
+    }
+
+    @keyframes borderSweep {
+      from {
+        --angle: 0deg;
+      }
+
+      to {
+        --angle: 360deg;
+      }
+    }
+
+    @keyframes breathe {
+      0% {
+        transform: scaleY(1) scaleX(1);
+      }
+
+      50% {
+        transform: scaleY(1.02) scaleX(0.99);
+      }
+
+      100% {
+        transform: scaleY(1) scaleX(1);
+      }
+    }
+
+    @keyframes cueBounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(5px);
+      }
+    }
+
+    @keyframes gradientFlow {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      100% {
+        background-position: 250% 50%;
+      }
+    }
+
+    @keyframes shine {
+      0% {
+        left: -60%;
+      }
+
+      60% {
+        left: 120%;
+      }
+
+      100% {
+        left: 120%;
+      }
+    }
+
+    @keyframes twinkle {
+
+      0%,
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.25) rotate(15deg);
+        opacity: 0.85;
+      }
+    }
+
+    @keyframes rippleAnim {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    @keyframes robotFloat {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(-2deg);
+      }
+
+      50% {
+        transform: translateY(-3px) rotate(2deg);
+      }
+    }
+
+    @keyframes sunPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 12px rgba(255, 167, 50, 0.6);
+        transform: scale(1);
+      }
+
+      50% {
+        box-shadow: 0 0 20px rgba(255, 167, 50, 0.9);
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes sunRotate {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .reminder-item {
+      display: grid !important;
+      grid-template-columns: auto 1fr;
+      grid-template-rows: auto auto;
+      gap: 6px 12px;
+      align-items: center;
+    }
+
+    .item-image {
+      grid-row: 1 / 3;
+    }
+
+    .item-content {
+      grid-row: 1 / 2;
+      grid-column: 2 / 3;
+    }
+
+    .ai-btn {
+      grid-row: 2 / 3;
+      grid-column: 2 / 3;
+      justify-self: end;
+      margin-top: 4px;
+      padding: 4px 12px;
+      font-size: 13px;
+      height: 28px;
+    }
+
+
+    /* Injected Mobile Tweaks (Global for Phone Emulator) */
+    .reminder-list-content {
+      max-height: 178px !important;
+    }
+
+    .reminder-item {
+      display: grid !important;
+      grid-template-columns: auto 1fr;
+      grid-template-rows: auto auto;
+      gap: 2px 12px !important;
+      align-items: center;
+      padding: 12px 6px !important;
+    }
+
+    .item-image {
+      grid-row: 1 / 3;
+      width: 46px !important;
+      height: 58px !important;
+    }
+
+    .item-content {
+      grid-row: 1 / 2;
+      grid-column: 2 / 3;
+    }
+
+    .ai-btn {
+      grid-row: 2 / 3;
+      grid-column: 2 / 3;
+      justify-self: end;
+      margin-top: 4px;
+      padding: 4px 12px;
+      font-size: 13px;
+      height: 28px;
+    }
+  </style>
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f4f8;
+    margin: 0;
+    padding: 40px 20px;
+  }
+  .demo-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .demo-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 800;
+    color: #1a2940;
+    margin-bottom: 10px;
+  }
+  .demo-subtitle {
+    text-align: center;
+    font-size: 16px;
+    color: #4a5b78;
+    margin-bottom: 40px;
+  }
+  .cards-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+  }
+  .case-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 340px;
+  }
+  .case-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a2940;
+    background: #e2e8f0;
+    padding: 8px 20px;
+    border-radius: 20px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .case-desc {
+    font-size: 14px;
+    color: #4a5b78;
+    text-align: center;
+    margin-bottom: 10px;
+    min-height: 40px;
+  }
+  .reminder-list-content {
+    max-height: none !important;
+    overflow: hidden !important;
+  }
+  .scroll-cue { display: none !important; }
+  
+  .status-label {
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
+    justify-self: end;
+    margin-top: 4px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #059669;
+    background-color: #d1fae5;
+    border-radius: 999px;
+    border: 1px solid #10b981;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .status-label svg {
+    width: 14px;
+    height: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-container">
+  <div class="demo-title">Demo Các Case: Thợ DMX nhắc lịch thiết bị bảo dưỡng</div>
+  <div class="demo-subtitle">Dựa theo Tài liệu Đặc tả (Mục 4.2 - 4.6)</div>
+  
+  <div class="cards-grid">
+
+    <div class="case-wrapper">
+      <div class="case-title">4.2. KH có thiết bị đến hạn</div>
+      <div class="case-desc">Hiển thị bình thường với 2 nút [Nhắc tôi sau] và [Đặt lịch].</div>
+      <div class="reminder-card" style="position:relative; right:auto; top:auto; transform:none; width:100%; max-width:340px; margin: 0 auto 16px auto; box-sizing: border-box; padding: 16px;">
+        <span class="border-glow" aria-hidden="true"></span>
+
+        <!-- Header -->
+        <div class="card-header">
+          <span class="header-icon" aria-hidden="true">
+            <div class="fancy-sparkle"
+              style="display:inline-block; width:18px; height:18px; flex-shrink:0; animation: ai-sparkle-pulse 2.5s ease-in-out infinite;">
+              <span style="
+        display: block; width: 100%; height: 100%; position: relative;
+        -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+      ">
+                <span class="ai-star-mask" style="
+          position: absolute; inset: 0; overflow: hidden;
+        ">
+                  <span style="
+            position: absolute; left: -50%; top: -50%; width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, #ff5a36 0deg, #e0f2fe 90deg, #007aff 180deg, #ffd700 270deg, #ff5a36 360deg);
+            animation: ai-sparkle-spin 3s linear infinite;
+          "></span>
+                </span>
+                <span style="
+          position: absolute; inset: 0;
+          background: radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%);
+          mix-blend-mode: screen;
+        "></span>
+              </span>
+            </div>
+          </span>
+          <h2 class="header-title" style="font-weight: 900 !important; background-image: linear-gradient(90deg, #5b3fb8 0%, #c46dff 30%, #ffd0e8 50%, #c46dff 70%, #5b3fb8 100%) !important; background-size: 200% 100% !important; -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent !important; animation: titleShimmer 6s linear infinite reverse !important;">Thợ DMX nhắc lịch thiết bị bảo dưỡng</h2>
+
+          <!-- ============================================================
+                 AI MASCOT — "DMX Bot"
+                 Premium redesign: distinctive helmet shape, layered glowing
+                 cyan eyes, circuit-board details, pulsing energy core &
+                 blinking ear LEDs. Fully animated, matches blue/purple theme.
+            ============================================================ -->
+          <div class="header-robot-wrap" aria-hidden="true">
+            <img src="../thodienmayxanh_mobile/thodmxmobile/ThoDMX_Weather_Card_Demo_Package/thoDMX2-RGB-nobg.png" alt="Mascot Thợ ĐMX"
+              class="header-robot mascot-static mascot-img">
+          </div>
+        </div>
+
+        <!-- List -->
+        <div class="reminder-list">
+          <div class="reminder-list-content" id="reminderListContent">
+            
+      
+            <div class="reminder-item">
+              <div class="item-image">
+                <img src="../thodienmayxanh_mobile/thodmxmobile/ThoDMX_Weather_Card_Demo_Package/productimg/gree-gwc09pb-k3d0p4-550x160.jpg"
+                  style="width:100%; height:100%; object-fit:contain; border-radius:inherit;" />
+              </div>
+              <div class="item-content">
+                <p class="item-title">Máy lạnh Gree GWC09PB-K3D0P4</p>
+                <p class="item-meta">Có khuyến cáo vệ sinh vào ngày <span class="highlight">20/06/2026</span></p>
+              </div>
+              <div class="btn-group" style="grid-row: 2 / 3; grid-column: 2 / 3; justify-self: end; display: flex; gap: 8px; align-items: center; margin-top: 4px;">
+  <button type="button" onclick="this.closest('.reminder-item').style.display='none'" style="padding: 4px 12px; font-size: 13px; height: 28px; border-radius: 999px; border: 1px solid #d1d5db; background-color: white; color: #4b5563; font-weight: 500; cursor: pointer; white-space: nowrap; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s;" onmouseover="this.style.backgroundColor='#f9fafb'" onmouseout="this.style.backgroundColor='white'">Nhắc tôi sau</button>
+  <button class="ai-btn" type="button" onclick="window.location.href='gio-hang.html'" style="margin-top: 0; grid-column: auto; grid-row: auto; justify-self: auto;">
+                <div class="fancy-sparkle"
+                  style="display:inline-block; width:18px; height:18px; flex-shrink:0; animation: ai-sparkle-pulse 2.5s ease-in-out infinite;">
+                  <span style="
+        display: block; width: 100%; height: 100%; position: relative;
+        -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+      ">
+                    <span class="ai-star-mask" style="
+          position: absolute; inset: 0; overflow: hidden;
+        ">
+                      <span style="
+            position: absolute; left: -50%; top: -50%; width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, #ff5a36 0deg, #e0f2fe 90deg, #007aff 180deg, #ffd700 270deg, #ff5a36 360deg);
+            animation: ai-sparkle-spin 3s linear infinite;
+          "></span>
+                    </span>
+                    <span style="
+          position: absolute; inset: 0;
+          background: radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%);
+          mix-blend-mode: screen;
+        "></span>
+                  </span>
+                </div>
+                <span class="label">Đặt lịch</span>
+              </button>
+</div>
+            </div>
+
+            
+      </div></div></div>
+    </div>
+
+    <div class="case-wrapper">
+      <div class="case-title">4.4. Thiết bị đã có lịch hẹn</div>
+      <div class="case-desc">Ẩn nút [Nhắc tôi sau]. Thay nút [Đặt lịch] bằng nhãn trạng thái "Đã đặt lịch hẹn".</div>
+      <div class="reminder-card" style="position:relative; right:auto; top:auto; transform:none; width:100%; max-width:340px; margin: 0 auto 16px auto; box-sizing: border-box; padding: 16px;">
+        <span class="border-glow" aria-hidden="true"></span>
+
+        <!-- Header -->
+        <div class="card-header">
+          <span class="header-icon" aria-hidden="true">
+            <div class="fancy-sparkle"
+              style="display:inline-block; width:18px; height:18px; flex-shrink:0; animation: ai-sparkle-pulse 2.5s ease-in-out infinite;">
+              <span style="
+        display: block; width: 100%; height: 100%; position: relative;
+        -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+      ">
+                <span class="ai-star-mask" style="
+          position: absolute; inset: 0; overflow: hidden;
+        ">
+                  <span style="
+            position: absolute; left: -50%; top: -50%; width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, #ff5a36 0deg, #e0f2fe 90deg, #007aff 180deg, #ffd700 270deg, #ff5a36 360deg);
+            animation: ai-sparkle-spin 3s linear infinite;
+          "></span>
+                </span>
+                <span style="
+          position: absolute; inset: 0;
+          background: radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%);
+          mix-blend-mode: screen;
+        "></span>
+              </span>
+            </div>
+          </span>
+          <h2 class="header-title" style="font-weight: 900 !important; background-image: linear-gradient(90deg, #5b3fb8 0%, #c46dff 30%, #ffd0e8 50%, #c46dff 70%, #5b3fb8 100%) !important; background-size: 200% 100% !important; -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent !important; animation: titleShimmer 6s linear infinite reverse !important;">Thợ DMX nhắc lịch thiết bị bảo dưỡng</h2>
+
+          <!-- ============================================================
+                 AI MASCOT — "DMX Bot"
+                 Premium redesign: distinctive helmet shape, layered glowing
+                 cyan eyes, circuit-board details, pulsing energy core &
+                 blinking ear LEDs. Fully animated, matches blue/purple theme.
+            ============================================================ -->
+          <div class="header-robot-wrap" aria-hidden="true">
+            <img src="../thodienmayxanh_mobile/thodmxmobile/ThoDMX_Weather_Card_Demo_Package/thoDMX2-RGB-nobg.png" alt="Mascot Thợ ĐMX"
+              class="header-robot mascot-static mascot-img">
+          </div>
+        </div>
+
+        <!-- List -->
+        <div class="reminder-list">
+          <div class="reminder-list-content" id="reminderListContent">
+            
+      
+            <div class="reminder-item">
+              <div class="item-image">
+                <img src="../thodienmayxanh_mobile/thodmxmobile/ThoDMX_Weather_Card_Demo_Package/productimg/gree-gwc09pb-k3d0p4-550x160.jpg"
+                  style="width:100%; height:100%; object-fit:contain; border-radius:inherit;" />
+              </div>
+              <div class="item-content">
+                <p class="item-title">Máy lạnh Gree GWC09PB-K3D0P4</p>
+                <p class="item-meta">Có khuyến cáo vệ sinh vào ngày <span class="highlight">20/06/2026</span></p>
+              </div>
+              
+  <div class="status-label">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+    </svg>
+    Đã đặt lịch hẹn
+  </div>
+            </div>
+
+            
+      </div></div></div>
+    </div>
+
+    <div class="case-wrapper" id="case45">
+      <div class="case-title">4.5. Hành động "Nhắc tôi sau"</div>
+      <div class="case-desc">Bấm nút "Nhắc tôi sau" để ẩn thiết bị khỏi danh sách.</div>
+      <div class="reminder-card" style="position:relative; right:auto; top:auto; transform:none; width:100%; max-width:340px; margin: 0 auto 16px auto; box-sizing: border-box; padding: 16px;">
+        <span class="border-glow" aria-hidden="true"></span>
+
+        <!-- Header -->
+        <div class="card-header">
+          <span class="header-icon" aria-hidden="true">
+            <div class="fancy-sparkle"
+              style="display:inline-block; width:18px; height:18px; flex-shrink:0; animation: ai-sparkle-pulse 2.5s ease-in-out infinite;">
+              <span style="
+        display: block; width: 100%; height: 100%; position: relative;
+        -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+      ">
+                <span class="ai-star-mask" style="
+          position: absolute; inset: 0; overflow: hidden;
+        ">
+                  <span style="
+            position: absolute; left: -50%; top: -50%; width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, #ff5a36 0deg, #e0f2fe 90deg, #007aff 180deg, #ffd700 270deg, #ff5a36 360deg);
+            animation: ai-sparkle-spin 3s linear infinite;
+          "></span>
+                </span>
+                <span style="
+          position: absolute; inset: 0;
+          background: radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%);
+          mix-blend-mode: screen;
+        "></span>
+              </span>
+            </div>
+          </span>
+          <h2 class="header-title" style="font-weight: 900 !important; background-image: linear-gradient(90deg, #5b3fb8 0%, #c46dff 30%, #ffd0e8 50%, #c46dff 70%, #5b3fb8 100%) !important; background-size: 200% 100% !important; -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent !important; animation: titleShimmer 6s linear infinite reverse !important;">Thợ DMX nhắc lịch thiết bị bảo dưỡng</h2>
+
+          <!-- ============================================================
+                 AI MASCOT — "DMX Bot"
+                 Premium redesign: distinctive helmet shape, layered glowing
+                 cyan eyes, circuit-board details, pulsing energy core &
+                 blinking ear LEDs. Fully animated, matches blue/purple theme.
+            ============================================================ -->
+          <div class="header-robot-wrap" aria-hidden="true">
+            <img src="../thodienmayxanh_mobile/thodmxmobile/ThoDMX_Weather_Card_Demo_Package/thoDMX2-RGB-nobg.png" alt="Mascot Thợ ĐMX"
+              class="header-robot mascot-static mascot-img">
+          </div>
+        </div>
+
+        <!-- List -->
+        <div class="reminder-list">
+          <div class="reminder-list-content" id="reminderListContent">
+            
+      
+            <div class="reminder-item">
+              <div class="item-image">
+                <img src="../thodienmayxanh_mobile/thodmxmobile/ThoDMX_Weather_Card_Demo_Package/productimg/gree-gwc09pb-k3d0p4-550x160.jpg"
+                  style="width:100%; height:100%; object-fit:contain; border-radius:inherit;" />
+              </div>
+              <div class="item-content">
+                <p class="item-title">Máy lạnh Gree GWC09PB-K3D0P4</p>
+                <p class="item-meta">Có khuyến cáo vệ sinh vào ngày <span class="highlight">20/06/2026</span></p>
+              </div>
+              <div class="btn-group" style="grid-row: 2 / 3; grid-column: 2 / 3; justify-self: end; display: flex; gap: 8px; align-items: center; margin-top: 4px;">
+  <button type="button" onclick="this.closest('.reminder-item').style.display='none'" style="padding: 4px 12px; font-size: 13px; height: 28px; border-radius: 999px; border: 1px solid #d1d5db; background-color: white; color: #4b5563; font-weight: 500; cursor: pointer; white-space: nowrap; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s;" onmouseover="this.style.backgroundColor='#f9fafb'" onmouseout="this.style.backgroundColor='white'">Nhắc tôi sau</button>
+  <button class="ai-btn" type="button" onclick="window.location.href='gio-hang.html'" style="margin-top: 0; grid-column: auto; grid-row: auto; justify-self: auto;">
+                <div class="fancy-sparkle"
+                  style="display:inline-block; width:18px; height:18px; flex-shrink:0; animation: ai-sparkle-pulse 2.5s ease-in-out infinite;">
+                  <span style="
+        display: block; width: 100%; height: 100%; position: relative;
+        -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+      ">
+                    <span class="ai-star-mask" style="
+          position: absolute; inset: 0; overflow: hidden;
+        ">
+                      <span style="
+            position: absolute; left: -50%; top: -50%; width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, #ff5a36 0deg, #e0f2fe 90deg, #007aff 180deg, #ffd700 270deg, #ff5a36 360deg);
+            animation: ai-sparkle-spin 3s linear infinite;
+          "></span>
+                    </span>
+                    <span style="
+          position: absolute; inset: 0;
+          background: radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%);
+          mix-blend-mode: screen;
+        "></span>
+                  </span>
+                </div>
+                <span class="label">Đặt lịch</span>
+              </button>
+</div>
+            </div>
+
+            
+      </div></div></div>
+    </div>
+
+    <div class="case-wrapper">
+      <div class="case-title">4.6. Hành động "Đặt lịch"</div>
+      <div class="case-desc">Bấm nút "Đặt lịch" để chuyển sang màn hình đặt lịch.</div>
+      <div class="reminder-card" style="position:relative; right:auto; top:auto; transform:none; width:100%; max-width:340px; margin: 0 auto 16px auto; box-sizing: border-box; padding: 16px;">
+        <span class="border-glow" aria-hidden="true"></span>
+
+        <!-- Header -->
+        <div class="card-header">
+          <span class="header-icon" aria-hidden="true">
+            <div class="fancy-sparkle"
+              style="display:inline-block; width:18px; height:18px; flex-shrink:0; animation: ai-sparkle-pulse 2.5s ease-in-out infinite;">
+              <span style="
+        display: block; width: 100%; height: 100%; position: relative;
+        -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+      ">
+                <span class="ai-star-mask" style="
+          position: absolute; inset: 0; overflow: hidden;
+        ">
+                  <span style="
+            position: absolute; left: -50%; top: -50%; width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, #ff5a36 0deg, #e0f2fe 90deg, #007aff 180deg, #ffd700 270deg, #ff5a36 360deg);
+            animation: ai-sparkle-spin 3s linear infinite;
+          "></span>
+                </span>
+                <span style="
+          position: absolute; inset: 0;
+          background: radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%);
+          mix-blend-mode: screen;
+        "></span>
+              </span>
+            </div>
+          </span>
+          <h2 class="header-title" style="font-weight: 900 !important; background-image: linear-gradient(90deg, #5b3fb8 0%, #c46dff 30%, #ffd0e8 50%, #c46dff 70%, #5b3fb8 100%) !important; background-size: 200% 100% !important; -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent !important; animation: titleShimmer 6s linear infinite reverse !important;">Thợ DMX nhắc lịch thiết bị bảo dưỡng</h2>
+
+          <!-- ============================================================
+                 AI MASCOT — "DMX Bot"
+                 Premium redesign: distinctive helmet shape, layered glowing
+                 cyan eyes, circuit-board details, pulsing energy core &
+                 blinking ear LEDs. Fully animated, matches blue/purple theme.
+            ============================================================ -->
+          <div class="header-robot-wrap" aria-hidden="true">
+            <img src="../thodienmayxanh_mobile/thodmxmobile/ThoDMX_Weather_Card_Demo_Package/thoDMX2-RGB-nobg.png" alt="Mascot Thợ ĐMX"
+              class="header-robot mascot-static mascot-img">
+          </div>
+        </div>
+
+        <!-- List -->
+        <div class="reminder-list">
+          <div class="reminder-list-content" id="reminderListContent">
+            
+      
+            <div class="reminder-item">
+              <div class="item-image">
+                <img src="../thodienmayxanh_mobile/thodmxmobile/ThoDMX_Weather_Card_Demo_Package/productimg/gree-gwc09pb-k3d0p4-550x160.jpg"
+                  style="width:100%; height:100%; object-fit:contain; border-radius:inherit;" />
+              </div>
+              <div class="item-content">
+                <p class="item-title">Máy lạnh Gree GWC09PB-K3D0P4</p>
+                <p class="item-meta">Có khuyến cáo vệ sinh vào ngày <span class="highlight">20/06/2026</span></p>
+              </div>
+              <div class="btn-group" style="grid-row: 2 / 3; grid-column: 2 / 3; justify-self: end; display: flex; gap: 8px; align-items: center; margin-top: 4px;">
+  <button type="button" onclick="this.closest('.reminder-item').style.display='none'" style="padding: 4px 12px; font-size: 13px; height: 28px; border-radius: 999px; border: 1px solid #d1d5db; background-color: white; color: #4b5563; font-weight: 500; cursor: pointer; white-space: nowrap; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s;" onmouseover="this.style.backgroundColor='#f9fafb'" onmouseout="this.style.backgroundColor='white'">Nhắc tôi sau</button>
+  <button class="ai-btn" type="button" onclick="window.location.href='gio-hang.html'" style="margin-top: 0; grid-column: auto; grid-row: auto; justify-self: auto;">
+                <div class="fancy-sparkle"
+                  style="display:inline-block; width:18px; height:18px; flex-shrink:0; animation: ai-sparkle-pulse 2.5s ease-in-out infinite;">
+                  <span style="
+        display: block; width: 100%; height: 100%; position: relative;
+        -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 24 24%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M12 0C12 6.627 17.373 12 24 12C17.373 12 12 17.373 12 24C12 17.373 6.627 12 0 12C6.627 12 12 6.627 12 0Z%22/></svg>');
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+      ">
+                    <span class="ai-star-mask" style="
+          position: absolute; inset: 0; overflow: hidden;
+        ">
+                      <span style="
+            position: absolute; left: -50%; top: -50%; width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, #ff5a36 0deg, #e0f2fe 90deg, #007aff 180deg, #ffd700 270deg, #ff5a36 360deg);
+            animation: ai-sparkle-spin 3s linear infinite;
+          "></span>
+                    </span>
+                    <span style="
+          position: absolute; inset: 0;
+          background: radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%);
+          mix-blend-mode: screen;
+        "></span>
+                  </span>
+                </div>
+                <span class="label">Đặt lịch</span>
+              </button>
+</div>
+            </div>
+
+            
+      </div></div></div>
+    </div>
+
+    <div class="case-wrapper">
+      <div class="case-title">4.3. KH chưa có thiết bị</div>
+      <div class="case-desc">Block nhắc lịch bị ẩn hoàn toàn (Không hiển thị).</div>
+      <div style="width: 100%; max-width: 340px; height: 150px; border: 2px dashed #cbd5e1; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: #64748b; font-weight: 500; background: #f8fafc;">
+        Block bị ẩn
+      </div>
+    </div>
+
+  </div>
+</div>
+<script>
+  document.querySelectorAll('button').forEach(btn => {
+      if(btn.textContent.trim() === 'Nhắc tôi sau') {
+          btn.onclick = function(e) {
+              e.preventDefault();
+              const card = this.closest('.case-wrapper');
+              if(card) {
+                  if (card.id === 'case45') {
+                      const item = this.closest('.reminder-item');
+                      item.style.transition = 'all 0.3s ease';
+                      item.style.opacity = '0';
+                      item.style.transform = 'translateX(-20px)';
+                      setTimeout(() => {
+                          item.style.display = 'none';
+                          alert('Hệ thống ghi nhận hoãn nhắc 7 ngày. Item đã bị ẩn.');
+                      }, 300);
+                  } else {
+                      alert('Hệ thống ghi nhận hoãn nhắc (Demo).');
+                  }
+              }
+          }
+      }
+      if(btn.textContent.trim() === 'Đặt lịch' || btn.classList.contains('ai-btn')) {
+          btn.onclick = function(e) {
+              e.preventDefault();
+              alert('Chuyển hướng đến màn hình đặt lịch dịch vụ bảo dưỡng (Pre-fill DeviceID, Brand, Address,...)');
+          }
+      }
+  });
+</script>
+</body>
+</html>
