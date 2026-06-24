@@ -1336,7 +1336,7 @@
 
     <div class="case-wrapper">
       <div class="case-title">4.2. KH có thiết bị đến hạn</div>
-      <div class="case-desc">Hiển thị bình thường với 2 nút [Nhắc tôi sau] và [Đặt lịch].</div>
+      <div class="case-desc">Hiển thị bình thường với nút [Đặt lịch].</div>
       <div class="reminder-card" style="position:relative; right:auto; top:auto; transform:none; width:100%; max-width:340px; margin: 0 auto 16px auto; box-sizing: border-box; padding: 16px;">
         <span class="border-glow" aria-hidden="true"></span>
 
@@ -1402,7 +1402,6 @@
                 <p class="item-meta">Có khuyến cáo vệ sinh vào ngày <span class="highlight">20/06/2026</span></p>
               </div>
               <div class="btn-group" style="grid-row: 2 / 3; grid-column: 2 / 3; justify-self: end; display: flex; gap: 8px; align-items: center; margin-top: 4px;">
-  <button type="button" onclick="this.closest('.reminder-item').style.display='none'" style="padding: 4px 12px; font-size: 13px; height: 28px; border-radius: 999px; border: 1px solid #d1d5db; background-color: white; color: #4b5563; font-weight: 500; cursor: pointer; white-space: nowrap; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s;" onmouseover="this.style.backgroundColor='#f9fafb'" onmouseout="this.style.backgroundColor='white'">Nhắc tôi sau</button>
   <button class="ai-btn" type="button" onclick="window.location.href='../thodienmayxanh_mobile/thodmxmobile/dich-vu/bao-duong-may-lanh.html'" style="margin-top: 0; grid-column: auto; grid-row: auto; justify-self: auto;">
                 <div class="fancy-sparkle"
                   style="display:inline-block; width:18px; height:18px; flex-shrink:0; animation: ai-sparkle-pulse 2.5s ease-in-out infinite;">
@@ -1444,7 +1443,7 @@
 
     <div class="case-wrapper">
       <div class="case-title">4.4. Thiết bị đã có lịch hẹn</div>
-      <div class="case-desc">Ẩn nút [Nhắc tôi sau]. Thay nút [Đặt lịch] bằng nhãn trạng thái "Đã đặt lịch hẹn".</div>
+      <div class="case-desc">Thay nút [Đặt lịch] bằng nhãn trạng thái "Đã đặt lịch hẹn".</div>
       <div class="reminder-card" style="position:relative; right:auto; top:auto; transform:none; width:100%; max-width:340px; margin: 0 auto 16px auto; box-sizing: border-box; padding: 16px;">
         <span class="border-glow" aria-hidden="true"></span>
 
@@ -1590,7 +1589,6 @@
                 <p class="item-meta">Có khuyến cáo vệ sinh vào ngày <span class="highlight">20/06/2026</span></p>
               </div>
               <div class="btn-group" style="grid-row: 2 / 3; grid-column: 2 / 3; justify-self: end; display: flex; gap: 8px; align-items: center; margin-top: 4px;">
-  <button type="button" onclick="this.closest('.reminder-item').style.display='none'" style="padding: 4px 12px; font-size: 13px; height: 28px; border-radius: 999px; border: 1px solid #d1d5db; background-color: white; color: #4b5563; font-weight: 500; cursor: pointer; white-space: nowrap; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s;" onmouseover="this.style.backgroundColor='#f9fafb'" onmouseout="this.style.backgroundColor='white'">Nhắc tôi sau</button>
   <button class="ai-btn" type="button" onclick="window.location.href='../thodienmayxanh_mobile/thodmxmobile/dich-vu/bao-duong-may-lanh.html'" style="margin-top: 0; grid-column: auto; grid-row: auto; justify-self: auto;">
                 <div class="fancy-sparkle"
                   style="display:inline-block; width:18px; height:18px; flex-shrink:0; animation: ai-sparkle-pulse 2.5s ease-in-out infinite;">
@@ -1698,7 +1696,6 @@
                 <p class="item-meta">Có khuyến cáo vệ sinh vào ngày <span class="highlight">20/06/2026</span></p>
               </div>
               <div class="btn-group" style="grid-row: 2 / 3; grid-column: 2 / 3; justify-self: end; display: flex; gap: 8px; align-items: center; margin-top: 4px;">
-  <button type="button" onclick="this.closest('.reminder-item').style.display='none'" style="padding: 4px 12px; font-size: 13px; height: 28px; border-radius: 999px; border: 1px solid #d1d5db; background-color: white; color: #4b5563; font-weight: 500; cursor: pointer; white-space: nowrap; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s;" onmouseover="this.style.backgroundColor='#f9fafb'" onmouseout="this.style.backgroundColor='white'">Nhắc tôi sau</button>
   <button class="ai-btn" type="button" onclick="window.location.href='../thodienmayxanh_mobile/thodmxmobile/dich-vu/bao-duong-may-lanh.html'" style="margin-top: 0; grid-column: auto; grid-row: auto; justify-self: auto;">
                 <div class="fancy-sparkle"
                   style="display:inline-block; width:18px; height:18px; flex-shrink:0; animation: ai-sparkle-pulse 2.5s ease-in-out infinite;">
@@ -1995,26 +1992,7 @@
 </div>
 <script>
   document.querySelectorAll('button').forEach(btn => {
-      if(btn.textContent.trim() === 'Nhắc tôi sau') {
-          btn.onclick = function(e) {
-              e.preventDefault();
-              const card = this.closest('.case-wrapper');
-              if(card) {
-                  if (card.id === 'case45') {
-                      const item = this.closest('.reminder-item');
-                      item.style.transition = 'all 0.3s ease';
-                      item.style.opacity = '0';
-                      item.style.transform = 'translateX(-20px)';
-                      setTimeout(() => {
-                          item.style.display = 'none';
-                          alert('Hệ thống ghi nhận hoãn nhắc 7 ngày. Item đã bị ẩn.');
-                      }, 300);
-                  } else {
-                      alert('Hệ thống ghi nhận hoãn nhắc (Demo).');
-                  }
-              }
-          }
-      }
+
       if(btn.textContent.trim() === 'Đặt lịch' || btn.classList.contains('ai-btn')) {
           btn.onclick = function(e) {
               e.preventDefault();
