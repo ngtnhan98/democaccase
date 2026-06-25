@@ -2150,131 +2150,6 @@
     
   </div>
 
-  <div class="demo-title" style="margin-top: 60px;">Demo Các Case: Tính năng thời tiết</div>
-  <div class="demo-subtitle">Các trường hợp hiển thị UI theo thời tiết</div>
-  
-  <div class="cards-grid">
-    <div class="case-wrapper">
-      <div class="case-title">5.1. Card thời tiết (Nắng nóng)</div>
-      <div class="case-desc">Gợi ý vệ sinh máy lạnh khi nắng nóng.</div>
-      <div class="wx-card-container" style="display:block; width:100%; max-width:340px;">
-        <div class="wx-card">
-          <div class="wx-bg bg-hot">
-            <img src="img/03_minimalist_unsplash_zjoydJb17mE.webp" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;" />
-            <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.25) 100%); z-index: 1;"></div>
-            <div class="apple-sun-container" style="position:absolute; left:50%; top:50%; transform:translate(-50%, -50%); width:140px; height:140px; z-index:2; pointer-events:none;">
-                <div style="
-                  position: absolute;
-                  width:340px;height:340px;
-                  top:-100px;left:-100px;
-                  opacity:.18;
-                  animation:rayRotate 30s linear infinite;
-                  background: 
-                    repeating-conic-gradient(from 0deg, rgba(255,255,255,0) 0deg, rgba(255,255,255,0.5) 10deg, rgba(255,255,255,0) 20deg),
-                    repeating-conic-gradient(from 15deg, rgba(255,255,255,0) 0deg, rgba(255,255,255,0.3) 14deg, rgba(255,255,255,0) 28deg),
-                    repeating-conic-gradient(from 5deg, rgba(255,255,255,0) 0deg, rgba(255,255,255,0.2) 6deg, rgba(255,255,255,0) 12deg);
-                  mix-blend-mode: screen;
-                  -webkit-mask-image: radial-gradient(circle, transparent 20%, black 40%, transparent 70%);
-                  mask-image: radial-gradient(circle, transparent 20%, black 40%, transparent 70%);
-                "></div>
-                <div style="
-                  position: absolute;
-                  width:105px;height:105px;
-                  top:17px;left:17px;
-                  opacity:.5;
-                  mix-blend-mode:screen;
-                  animation:sunGlow 8s ease-in-out infinite;
-                  border-radius: 50%;
-                  background: radial-gradient(circle, rgba(150, 220, 255, 0.8) 0%, transparent 70%);
-                "></div>
-                <div style="
-                  position: absolute;
-                  width:88px;height:88px;
-                  top:26px;left:26px;
-                  opacity:.4;
-                  mix-blend-mode:screen;
-                  animation:flarePop 4s ease-in-out infinite;
-                ">
-                   <div style="width:100%; height:100%; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(100, 255, 200, 0.8) 0%, transparent 70%); transform: rotate(-45deg) scaleX(2.5) scaleY(0.2);"></div>
-                </div>
-            </div>
-          </div>
-          <div class="wx-content">
-            <div class="wx-layout-top">
-              <div class="wx-temp-group"><span class="wx-temp">39°C</span></div>
-              <div class="wx-loc-group">
-                <div class="wx-city">📍 Thủ Đức, TP.Hồ Chí Minh</div>
-                <div class="wx-subtitle">Cập nhật lúc 10:30 hôm nay</div>
-              </div>
-            </div>
-            <div class="wx-layout-bottom">
-              <div class="wx-text-group">
-                <div class="wx-desc">Phát hiện thời tiết nóng tại khu vực của bạn, phù hợp vệ sinh máy lạnh để <strong>làm lạnh tốt hơn</strong> và <strong>tiết kiệm điện hơn</strong>!</div>
-                <button class="wx-cta">
-                  <div style="position:relative; display:inline-block; width:20px; height:20px; margin-right:8px; flex-shrink:0;">
-                    <span class="ai-star-mask" style="position:absolute; left:50%; top:50%; width:8px; height:8px; background:#fff; animation:ai-sparkle-pop-1 2s ease-in-out infinite 0s;"></span>
-                    <span class="ai-star-mask" style="position:absolute; left:50%; top:50%; width:10px; height:10px; background:#e0f2fe; animation:ai-sparkle-pop-2 2.4s ease-in-out infinite 0.8s;"></span>
-                    <span class="ai-star-mask" style="position:absolute; left:50%; top:50%; width:6px; height:6px; background:#ffd700; animation:ai-sparkle-pop-3 2.8s ease-in-out infinite 1.6s;"></span>
-                    <span style="display: block; width: 100%; height: 100%; position: relative; animation: ai-sparkle-pulse 2.6s ease-in-out infinite;">
-                      <span class="ai-star-mask" style="position: absolute; inset: 0; overflow: hidden;">
-                        <span style="position: absolute; left: -50%; top: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, #ff5a36 0deg, #e0f2fe 90deg, #007aff 180deg, #ffd700 270deg, #ff5a36 360deg); animation: ai-sparkle-spin 3s linear infinite;"></span>
-                      </span>
-                      <span style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%); mix-blend-mode: screen;"></span>
-                    </span>
-                  </div>
-                  <span>Xem gợi ý từ Thợ DMX</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="case-wrapper">
-      <div class="case-title">5.2. Card thời tiết (Mưa ẩm)</div>
-      <div class="case-desc">Gợi ý vệ sinh máy giặt khi trời mưa lớn.</div>
-      <div class="wx-card-container" style="display:block; width:100%; max-width:340px;">
-        <div class="wx-card">
-          <div class="wx-bg bg-rain">
-            <img src="img/04_minimalist_unsplash_tl8GM4dWXnM.webp" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;" />
-            <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(30, 45, 60, 0.4) 0%, rgba(20, 30, 40, 0.7) 100%); z-index: 1;"></div>
-            <canvas class="rainCanvasStatic" id="rainCanvasStatic" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;"></canvas>
-          </div>
-          <div class="wx-content">
-            <div class="wx-layout-top">
-              <div class="wx-temp-group"><span class="wx-temp">27°C</span></div>
-              <div class="wx-loc-group">
-                <div class="wx-city">📍 Thủ Đức, TP.Hồ Chí Minh</div>
-                <div class="wx-subtitle">Cập nhật lúc 10:30 hôm nay</div>
-              </div>
-            </div>
-            <div class="wx-layout-bottom">
-              <div class="wx-text-group">
-                <div class="wx-desc">Mưa lớn độ ẩm cao, lồng giặt dễ nấm mốc. Gợi ý <strong>vệ sinh lồng giặt</strong> bảo vệ sức khỏe gia đình!</div>
-                <button class="wx-cta" id="rainBtnStatic">
-                  <div style="position:relative; display:inline-block; width:20px; height:20px; margin-right:8px; flex-shrink:0;">
-                    <span class="ai-star-mask" style="position:absolute; left:50%; top:50%; width:8px; height:8px; background:#fff; animation:ai-sparkle-pop-1 2s ease-in-out infinite 0s;"></span>
-                    <span class="ai-star-mask" style="position:absolute; left:50%; top:50%; width:10px; height:10px; background:#e0f2fe; animation:ai-sparkle-pop-2 2.4s ease-in-out infinite 0.8s;"></span>
-                    <span class="ai-star-mask" style="position:absolute; left:50%; top:50%; width:6px; height:6px; background:#ffd700; animation:ai-sparkle-pop-3 2.8s ease-in-out infinite 1.6s;"></span>
-                    <span style="display: block; width: 100%; height: 100%; position: relative; animation: ai-sparkle-pulse 2.6s ease-in-out infinite;">
-                      <span class="ai-star-mask" style="position: absolute; inset: 0; overflow: hidden;">
-                        <span style="position: absolute; left: -50%; top: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, #ff5a36 0deg, #e0f2fe 90deg, #007aff 180deg, #ffd700 270deg, #ff5a36 360deg); animation: ai-sparkle-spin 3s linear infinite;"></span>
-                      </span>
-                      <span style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%); mix-blend-mode: screen;"></span>
-                    </span>
-                  </div>
-                  <span>Xem gợi ý từ Thợ DMX</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
   <div class="demo-title" style="margin-top: 60px;">Demo Reminder Card - Desktop</div>
   <div class="cards-grid" style="display: flex; flex-direction: column; gap: 40px; align-items: center; width: 100%;">
     <div class="case-wrapper" style="width: 100%; position: relative; background: #fff; padding: 40px; border-radius: 12px; overflow: hidden; min-height: 400px;">
@@ -2643,6 +2518,132 @@
         </div>
       </div>
     </div>
+  </div>
+
+
+  <div class="demo-title" style="margin-top: 60px;">Demo Các Case: Tính năng thời tiết</div>
+  <div class="demo-subtitle">Các trường hợp hiển thị UI theo thời tiết</div>
+  
+  <div class="cards-grid">
+    <div class="case-wrapper">
+      <div class="case-title">5.1. Card thời tiết (Nắng nóng)</div>
+      <div class="case-desc">Gợi ý vệ sinh máy lạnh khi nắng nóng.</div>
+      <div class="wx-card-container" style="display:block; width:100%; max-width:340px;">
+        <div class="wx-card">
+          <div class="wx-bg bg-hot">
+            <img src="img/03_minimalist_unsplash_zjoydJb17mE.webp" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;" />
+            <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.25) 100%); z-index: 1;"></div>
+            <div class="apple-sun-container" style="position:absolute; left:50%; top:50%; transform:translate(-50%, -50%); width:140px; height:140px; z-index:2; pointer-events:none;">
+                <div style="
+                  position: absolute;
+                  width:340px;height:340px;
+                  top:-100px;left:-100px;
+                  opacity:.18;
+                  animation:rayRotate 30s linear infinite;
+                  background: 
+                    repeating-conic-gradient(from 0deg, rgba(255,255,255,0) 0deg, rgba(255,255,255,0.5) 10deg, rgba(255,255,255,0) 20deg),
+                    repeating-conic-gradient(from 15deg, rgba(255,255,255,0) 0deg, rgba(255,255,255,0.3) 14deg, rgba(255,255,255,0) 28deg),
+                    repeating-conic-gradient(from 5deg, rgba(255,255,255,0) 0deg, rgba(255,255,255,0.2) 6deg, rgba(255,255,255,0) 12deg);
+                  mix-blend-mode: screen;
+                  -webkit-mask-image: radial-gradient(circle, transparent 20%, black 40%, transparent 70%);
+                  mask-image: radial-gradient(circle, transparent 20%, black 40%, transparent 70%);
+                "></div>
+                <div style="
+                  position: absolute;
+                  width:105px;height:105px;
+                  top:17px;left:17px;
+                  opacity:.5;
+                  mix-blend-mode:screen;
+                  animation:sunGlow 8s ease-in-out infinite;
+                  border-radius: 50%;
+                  background: radial-gradient(circle, rgba(150, 220, 255, 0.8) 0%, transparent 70%);
+                "></div>
+                <div style="
+                  position: absolute;
+                  width:88px;height:88px;
+                  top:26px;left:26px;
+                  opacity:.4;
+                  mix-blend-mode:screen;
+                  animation:flarePop 4s ease-in-out infinite;
+                ">
+                   <div style="width:100%; height:100%; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(100, 255, 200, 0.8) 0%, transparent 70%); transform: rotate(-45deg) scaleX(2.5) scaleY(0.2);"></div>
+                </div>
+            </div>
+          </div>
+          <div class="wx-content">
+            <div class="wx-layout-top">
+              <div class="wx-temp-group"><span class="wx-temp">39°C</span></div>
+              <div class="wx-loc-group">
+                <div class="wx-city">📍 Thủ Đức, TP.Hồ Chí Minh</div>
+                <div class="wx-subtitle">Cập nhật lúc 10:30 hôm nay</div>
+              </div>
+            </div>
+            <div class="wx-layout-bottom">
+              <div class="wx-text-group">
+                <div class="wx-desc">Phát hiện thời tiết nóng tại khu vực của bạn, phù hợp vệ sinh máy lạnh để <strong>làm lạnh tốt hơn</strong> và <strong>tiết kiệm điện hơn</strong>!</div>
+                <button class="wx-cta">
+                  <div style="position:relative; display:inline-block; width:20px; height:20px; margin-right:8px; flex-shrink:0;">
+                    <span class="ai-star-mask" style="position:absolute; left:50%; top:50%; width:8px; height:8px; background:#fff; animation:ai-sparkle-pop-1 2s ease-in-out infinite 0s;"></span>
+                    <span class="ai-star-mask" style="position:absolute; left:50%; top:50%; width:10px; height:10px; background:#e0f2fe; animation:ai-sparkle-pop-2 2.4s ease-in-out infinite 0.8s;"></span>
+                    <span class="ai-star-mask" style="position:absolute; left:50%; top:50%; width:6px; height:6px; background:#ffd700; animation:ai-sparkle-pop-3 2.8s ease-in-out infinite 1.6s;"></span>
+                    <span style="display: block; width: 100%; height: 100%; position: relative; animation: ai-sparkle-pulse 2.6s ease-in-out infinite;">
+                      <span class="ai-star-mask" style="position: absolute; inset: 0; overflow: hidden;">
+                        <span style="position: absolute; left: -50%; top: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, #ff5a36 0deg, #e0f2fe 90deg, #007aff 180deg, #ffd700 270deg, #ff5a36 360deg); animation: ai-sparkle-spin 3s linear infinite;"></span>
+                      </span>
+                      <span style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%); mix-blend-mode: screen;"></span>
+                    </span>
+                  </div>
+                  <span>Xem gợi ý từ Thợ DMX</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-wrapper">
+      <div class="case-title">5.2. Card thời tiết (Mưa ẩm)</div>
+      <div class="case-desc">Gợi ý vệ sinh máy giặt khi trời mưa lớn.</div>
+      <div class="wx-card-container" style="display:block; width:100%; max-width:340px;">
+        <div class="wx-card">
+          <div class="wx-bg bg-rain">
+            <img src="img/04_minimalist_unsplash_tl8GM4dWXnM.webp" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;" />
+            <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(30, 45, 60, 0.4) 0%, rgba(20, 30, 40, 0.7) 100%); z-index: 1;"></div>
+            <canvas class="rainCanvasStatic" id="rainCanvasStatic" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;"></canvas>
+          </div>
+          <div class="wx-content">
+            <div class="wx-layout-top">
+              <div class="wx-temp-group"><span class="wx-temp">27°C</span></div>
+              <div class="wx-loc-group">
+                <div class="wx-city">📍 Thủ Đức, TP.Hồ Chí Minh</div>
+                <div class="wx-subtitle">Cập nhật lúc 10:30 hôm nay</div>
+              </div>
+            </div>
+            <div class="wx-layout-bottom">
+              <div class="wx-text-group">
+                <div class="wx-desc">Mưa lớn độ ẩm cao, lồng giặt dễ nấm mốc. Gợi ý <strong>vệ sinh lồng giặt</strong> bảo vệ sức khỏe gia đình!</div>
+                <button class="wx-cta" id="rainBtnStatic">
+                  <div style="position:relative; display:inline-block; width:20px; height:20px; margin-right:8px; flex-shrink:0;">
+                    <span class="ai-star-mask" style="position:absolute; left:50%; top:50%; width:8px; height:8px; background:#fff; animation:ai-sparkle-pop-1 2s ease-in-out infinite 0s;"></span>
+                    <span class="ai-star-mask" style="position:absolute; left:50%; top:50%; width:10px; height:10px; background:#e0f2fe; animation:ai-sparkle-pop-2 2.4s ease-in-out infinite 0.8s;"></span>
+                    <span class="ai-star-mask" style="position:absolute; left:50%; top:50%; width:6px; height:6px; background:#ffd700; animation:ai-sparkle-pop-3 2.8s ease-in-out infinite 1.6s;"></span>
+                    <span style="display: block; width: 100%; height: 100%; position: relative; animation: ai-sparkle-pulse 2.6s ease-in-out infinite;">
+                      <span class="ai-star-mask" style="position: absolute; inset: 0; overflow: hidden;">
+                        <span style="position: absolute; left: -50%; top: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, #ff5a36 0deg, #e0f2fe 90deg, #007aff 180deg, #ffd700 270deg, #ff5a36 360deg); animation: ai-sparkle-spin 3s linear infinite;"></span>
+                      </span>
+                      <span style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%); mix-blend-mode: screen;"></span>
+                    </span>
+                  </div>
+                  <span>Xem gợi ý từ Thợ DMX</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <div class="demo-title" style="margin-top: 60px;">Demo Các Case: Tính năng thời tiết cho desktop</div>
