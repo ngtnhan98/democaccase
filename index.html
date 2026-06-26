@@ -2906,6 +2906,7 @@
       left: 50%;
       transform: translate(-50%, -50%) scale(0.92);
       width: 420px;
+      box-sizing: border-box;
       background: white;
       border-radius: 20px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.1);
@@ -2918,6 +2919,9 @@
       opacity: 1;
       pointer-events: auto;
       transform: translate(-50%, -50%) scale(1);
+    }
+    .device-popup *, .device-popup *::before, .device-popup *::after {
+      box-sizing: border-box;
     }
     .wx-bs-header {
       display: flex;
@@ -2946,7 +2950,7 @@
 
   <!-- Popup device list (for desktop rain demo) -->
   <div class="device-popup-backdrop" id="rainBackdropDesktop" onclick="closeRainPopupDesktop()"></div>
-  <div class="device-popup" id="rainPopupDesktop" style="padding: 20px 16px; max-height: 85vh; display: flex; flex-direction: column;">
+  <div class="device-popup" id="rainPopupDesktop" style="padding: 24px; max-height: 85vh; display: flex; flex-direction: column;">
     <div class="wx-bs-header">
       <h3 class="wx-bs-title">Gợi ý dịch vụ bảo dưỡng</h3>
       <button class="wx-bs-close" onclick="closeRainPopupDesktop()">
@@ -2955,7 +2959,7 @@
         </svg>
       </button>
     </div>
-    <div class="wx-bs-content" style="padding-bottom: 0px;">
+    <div class="wx-bs-content">
       <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; justify-content: center;">
         <a href="#" style="text-decoration: none;">
           <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 12px; padding: 12px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); cursor: pointer; height: 100%;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='white'">
