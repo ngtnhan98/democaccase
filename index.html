@@ -2755,7 +2755,7 @@
             <div class="wx-layout-bottom" style="margin-top: 20px;">
               <div class="wx-text-group" style="flex: 1;">
                 <div class="wx-desc" style="margin-bottom: 16px;">Mưa lớn độ ẩm cao, lồng giặt dễ nấm mốc. Gợi ý <strong>vệ sinh lồng giặt</strong> bảo vệ sức khỏe gia đình!</div>
-                <button class="wx-cta" id="rainBtnDesktop" style="margin-top: 0; align-self: flex-start;">
+                <button class="wx-cta" id="rainBtnDesktop" onclick="openRainPopupDesktop()" style="margin-top: 0; align-self: flex-start;">
                   <div style="position:relative; display:inline-block; width:20px; height:20px; margin-right:8px; flex-shrink:0;">
                     <span class="ai-star-mask" style="position:absolute; left:50%; top:50%; width:8px; height:8px; background:#fff; animation:ai-sparkle-pop-1 2s ease-in-out infinite 0s;"></span>
                     <span class="ai-star-mask" style="position:absolute; left:50%; top:50%; width:10px; height:10px; background:#e0f2fe; animation:ai-sparkle-pop-2 2.4s ease-in-out infinite 0.8s;"></span>
@@ -2883,5 +2883,110 @@
     if (rsDesktop.cvs) rsDesktop.start();
   });
 </script>
+
+  <style>
+    /* Backdrop */
+    .device-popup-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.25);
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .device-popup-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    /* Popup */
+    .device-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.92);
+      width: 420px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .device-popup.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .wx-bs-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .wx-bs-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0;
+    }
+    .wx-bs-close {
+      background: #f1f5f9;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+  </style>
+
+  <!-- Popup device list (for desktop rain demo) -->
+  <div class="device-popup-backdrop" id="rainBackdropDesktop" onclick="closeRainPopupDesktop()"></div>
+  <div class="device-popup" id="rainPopupDesktop" style="padding: 20px 16px; max-height: 85vh; display: flex; flex-direction: column;">
+    <div class="wx-bs-header">
+      <h3 class="wx-bs-title">Gợi ý dịch vụ bảo dưỡng</h3>
+      <button class="wx-bs-close" onclick="closeRainPopupDesktop()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 1L1 13M1 1L13 13" stroke="#4A5B78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="wx-bs-content" style="padding-bottom: 0px;">
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; justify-content: center;">
+        <a href="#" style="text-decoration: none;">
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 12px; padding: 12px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); cursor: pointer; height: 100%;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='white'">
+            <div style="height: 48px; width: 48px; margin: 0 auto;">
+              <img src="https://img.tgdd.vn/imgt/ecom/f_webp%2Cfit_outside%2Cquality_95/https://cdnv2.tgdd.vn/pim/cdn/images/202512/bdmg231915.png" alt="Vệ sinh máy giặt" style="object-fit: contain; width: 100%; height: 100%;">
+            </div>
+            <p style="text-align: center; font-size: 13px; line-height: 1.3; font-weight: 500; color: #1e293b; margin: 0;">Vệ sinh máy giặt</p>
+          </div>
+        </a>
+        <a href="#" style="text-decoration: none;">
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 12px; padding: 12px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); cursor: pointer; height: 100%;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='white'">
+            <div style="height: 48px; width: 48px; margin: 0 auto;">
+              <img src="https://img.tgdd.vn/imgt/ecom/f_webp%2Cfit_outside%2Cquality_95/https://cdnv2.tgdd.vn/pim/cdn/images/202512/vsbinhnonglsnh232734.png" alt="Vệ sinh máy nước nóng" style="object-fit: contain; width: 100%; height: 100%;">
+            </div>
+            <p style="text-align: center; font-size: 13px; line-height: 1.3; font-weight: 500; color: #1e293b; margin: 0;">Vệ sinh máy nước nóng</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openRainPopupDesktop() {
+      document.getElementById('rainPopupDesktop').classList.add('open');
+      document.getElementById('rainBackdropDesktop').classList.add('open');
+    }
+    function closeRainPopupDesktop() {
+      document.getElementById('rainPopupDesktop').classList.remove('open');
+      document.getElementById('rainBackdropDesktop').classList.remove('open');
+    }
+  </script>
 </body>
+
 </html>
